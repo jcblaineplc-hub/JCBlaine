@@ -33,7 +33,7 @@ export const Hero: React.FC<HeroProps> = ({ scrollToSection }) => {
           </h1>
           <p className="mt-4 max-w-2xl mx-auto text-xl text-slate-200 font-light mb-10">
             Expert guidance on cross-border corporate planning, tax, and investment structuring. 
-            Bridging the gap between US Law and Southeast Asian opportunities.
+            Bridging the gap between the US and Southeast Asia.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <button 
