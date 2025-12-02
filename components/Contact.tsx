@@ -1,7 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ADDRESS, CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_TH, Icons } from '../constants';
 
 export const Contact: React.FC = () => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    interest: 'US Investment (from Asia)',
+    message: ''
+  });
+  
+  const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmissionStatus('submitting');
+
+    // Encode data as x-www-form-urlencoded
+    const encode = (data: Record<string, string>) => {
+      return Object.keys(data)
+        .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+        .join("&");
+    };
+
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: encode({ 
+        "form-name": "contact", 
+        ...formData 
+      })
+    })
+      .then(() => {
+        setSubmissionStatus('success');
+        setFormData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          interest: 'US Investment (from Asia)',
+          message: ''
+        });
+      })
+      .catch((error) => {
+        console.error("Form submission error:", error);
+        setSubmissionStatus('error');
+      });
+  };
+
   return (
     <section id="contact" className="py-24 bg-law-dark text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,41 +106,111 @@ export const Contact: React.FC = () => {
           {/* Form */}
           <div className="bg-white rounded-lg p-8 text-slate-900">
             <h4 className="text-xl font-bold font-serif text-law-dark mb-6">Request a Consultation</h4>
-            <form className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">First Name</label>
-                  <input type="text" className="w-full bg-slate-50 border border-slate-300 rounded px-3 py-2 focus:outline-none focus:border-law-blue" />
+            {submissionStatus === 'success' ? (
+              <div className="bg-green-50 border border-green-200 text-green-800 rounded p-6 text-center">
+                <div className="flex justify-center mb-4">
+                  <div className="h-12 w-12 bg-green-100 rounded-full flex items-center justify-center">
+                     <Icons.Check />
+                  </div>
+                </div>
+                <h5 className="font-bold text-lg mb-2">Inquiry Received</h5>
+                <p>Thank you for contacting JCBlaine, PLC. We will review your message and respond shortly.</p>
+                <button 
+                  onClick={() => setSubmissionStatus('idle')}
+                  className="mt-4 text-sm text-green-700 underline hover:text-green-900"
+                >
+                  Send another message
+                </button>
+              </div>
+            ) : (
+              <form 
+                onSubmit={handleSubmit} 
+                className="space-y-4" 
+                data-netlify="true" 
+                name="contact"
+              >
+                {/* Hidden Input for Netlify Forms */}
+                <input type="hidden" name="form-name" value="contact" />
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">First Name</label>
+                    <input 
+                      type="text" 
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      required
+                      className="w-full bg-slate-50 border border-slate-300 rounded px-3 py-2 focus:outline-none focus:border-law-blue" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Last Name</label>
+                    <input 
+                      type="text" 
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleChange}
+                      required
+                      className="w-full bg-slate-50 border border-slate-300 rounded px-3 py-2 focus:outline-none focus:border-law-blue" 
+                    />
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Last Name</label>
-                  <input type="text" className="w-full bg-slate-50 border border-slate-300 rounded px-3 py-2 focus:outline-none focus:border-law-blue" />
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                  <input 
+                    type="email" 
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-slate-50 border border-slate-300 rounded px-3 py-2 focus:outline-none focus:border-law-blue" 
+                  />
                 </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
-                <input type="email" className="w-full bg-slate-50 border border-slate-300 rounded px-3 py-2 focus:outline-none focus:border-law-blue" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Primary Interest</label>
-                <select className="w-full bg-slate-50 border border-slate-300 rounded px-3 py-2 focus:outline-none focus:border-law-blue">
-                  <option>US Investment (from Asia)</option>
-                  <option>SE Asia Expansion (from US)</option>
-                  <option>Tax & Estate Planning</option>
-                  <option>Corporate Compliance</option>
-                  <option>Corporate Directorship Services</option>
-                  <option>Legal Education & Training</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Message</label>
-                <textarea rows={4} className="w-full bg-slate-50 border border-slate-300 rounded px-3 py-2 focus:outline-none focus:border-law-blue"></textarea>
-              </div>
-              <button type="submit" className="w-full bg-law-blue hover:bg-blue-900 text-white font-bold py-3 rounded transition-colors uppercase text-sm tracking-widest">
-                Submit Inquiry
-              </button>
-            </form>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Primary Interest</label>
+                  <select 
+                    name="interest"
+                    value={formData.interest}
+                    onChange={handleChange}
+                    className="w-full bg-slate-50 border border-slate-300 rounded px-3 py-2 focus:outline-none focus:border-law-blue"
+                  >
+                    <option>US Investment (from Asia)</option>
+                    <option>SE Asia Expansion (from US)</option>
+                    <option>Tax & Estate Planning</option>
+                    <option>Corporate Compliance</option>
+                    <option>Corporate Directorship Services</option>
+                    <option>Legal Education & Training</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Message</label>
+                  <textarea 
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={4} 
+                    required
+                    className="w-full bg-slate-50 border border-slate-300 rounded px-3 py-2 focus:outline-none focus:border-law-blue"
+                  ></textarea>
+                </div>
+                
+                {submissionStatus === 'error' && (
+                  <div className="text-red-600 text-sm bg-red-50 p-2 rounded border border-red-200">
+                    There was an error sending your message. Please try again or contact us via email.
+                  </div>
+                )}
+
+                <button 
+                  type="submit" 
+                  disabled={submissionStatus === 'submitting'}
+                  className={`w-full bg-law-blue hover:bg-blue-900 text-white font-bold py-3 rounded transition-colors uppercase text-sm tracking-widest flex items-center justify-center ${submissionStatus === 'submitting' ? 'opacity-75 cursor-wait' : ''}`}
+                >
+                  {submissionStatus === 'submitting' ? 'Sending...' : 'Submit Inquiry'}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </div>

@@ -5,7 +5,7 @@ let chatSession: Chat | null = null;
 
 // Initialize the API client. 
 // Note: In a production environment, API calls should be proxied through a backend to protect the key.
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_API_KEY || '' });
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
 
 const SYSTEM_INSTRUCTION = `
 You are the intake assistant for "JCBlaine, PLC", a law firm specializing in US-SE Asia cross-border legal matters.
