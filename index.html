@@ -11,8 +11,8 @@
         theme: {
           extend: {
             colors: {
-              'law-blue': '#0033a0',   /* Royal Blue from logo */
-              'law-silver': '#94a3b8', /* Metallic Silver/Slate */
+              'law-blue': '#0033a0',   /* Royal Blue */
+              'law-silver': '#94a3b8', /* Metallic Silver */
               'law-dark': '#0f172a',
               'law-light': '#f8fafc',
             },
@@ -25,40 +25,24 @@
       }
     </script>
     <style>
-      /* Smooth scrolling for anchor links */
-      html {
-        scroll-behavior: smooth;
-      }
+      html { scroll-behavior: smooth; }
       .text-silver-gradient {
         background: linear-gradient(to right, #94a3b8, #e2e8f0, #94a3b8);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
-  }
-}
-</script>
-</head>
-  <body class="bg-slate-50 text-slate-900 font-sans antialiased">
-    <div id="root"></div>
-    <!-- 
-      Netlify Forms Detection:
-      This hidden form allows Netlify to detect the form parameters at build time.
-      It must match the 'name' and input 'name' attributes of the React form.
-    -->
+  </head>
+  <body>
     <form name="contact" netlify netlify-honeypot="bot-field" hidden>
-      <input type="text" name="firstName" />
-      <input type="text" name="lastName" />
-      <input type="email" name="email" />
-      <select name="interest"></select>
-      <textarea name="message"></textarea>
-    </form>
-  </body>
+  <input type="text" name="name" />
+  <input type="text" name="email" />
+  <input type="text" name="subject" />
+  <textarea name="message"></textarea>
+</form>
 </html>
+    <div id="root"></div>
+
+    <script type="module" src="/index.tsx"></script>
+  </body>
+  
