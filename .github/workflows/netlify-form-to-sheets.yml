@@ -1,0 +1,47 @@
+name: Netlify form submission to Google Sheets
+
+# Appends each Netlify Forms submission (expat-tax-guide, ai-ready-law-firm-guide)
+# as a new row in the "Lotus Bay Guide Leads" spreadsheet.
+#
+# Triggered by a Netlify outgoing webhook that sends a repository_dispatch
+# event of type "netlify-form" to this repository.
+#
+# Required repository secrets:
+#   GCP_SA_KEY  - full JSON key of a Google service account with edit access to the sheet
+#   SHEETS_ID   - the spreadsheet ID of "Lotus Bay Guide Leads"
+
+on:
+  repository_dispatch:
+    types: [netlify-form]
+  # Allow a manual test run with a sample payload
+  workflow_dispatch:
+    inputs:
+      sample:
+        description: "Run with a built-in sample payload for testing"
+        required: false
+        default: "true"
+
+jobs:
+  append-lead:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install --quiet google-auth google-api-python-client
+
+      - name: Append submission to Google Sheets
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          SHEETS_ID: ${{ secrets.SHEETS_ID }}
+          # Netlify sends the submission object as client_payload
+          EVENT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
+          EVENT_NAME: ${{ github.event_name }}
+          RUN_SAMPLE: ${{ github.event.inputs.sample }}
+        run: python .github/scripts/append_lead.py
