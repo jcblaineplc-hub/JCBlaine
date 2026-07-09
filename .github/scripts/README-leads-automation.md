@@ -112,6 +112,28 @@ Note: multi-step Zaps require a paid Zapier plan.
 
 ---
 
+## Email alerts on new leads
+
+In addition to logging leads to the spreadsheet, Netlify can email you on every
+new submission. This is configured in the Netlify dashboard (no code needed):
+
+1. Netlify → your site → **Forms** (or Site configuration → **Forms**).
+2. Under **Form notifications**, click **Add notification → Email notification**.
+3. **Event to listen for:** New form submission.
+4. **Email to notify:** `blainejo@lotusbay.law`
+5. Optionally repeat so both the `expat-tax-guide` and `ai-ready-law-firm-guide`
+   forms are covered (Netlify lets you scope a notification to a specific form,
+   or leave it site-wide to cover all forms).
+6. Save.
+
+Each email includes the submitter's name, email, situation/role, and whether
+they ticked the consultation/briefing checkbox — so you can spot hot leads at a
+glance.
+
+> Note: Netlify's built-in email fires on **every** submission and cannot be
+> filtered to only "consultation interest = Yes". If you later want alerts for
+> hot leads *only*, that can be routed through the GitHub Action instead.
+
 ## Testing
 
 - In the repo: **Actions → "Netlify form submission to Google Sheets" → Run
