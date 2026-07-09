@@ -24,8 +24,10 @@ const App: React.FC = () => {
         <Hero scrollToSection={scrollToSection} />
         <Services />
         <About />
-        <AIGuidePromo />
-        <TaxGuidePromo />
+        <div id="guides">
+          <AIGuidePromo />
+          <TaxGuidePromo />
+        </div>
         <Contact />
       </main>
       <Footer />

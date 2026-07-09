@@ -49,6 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrollToSection }) => {
             <button onClick={() => handleNavClick('home')} className={linkClasses}>Home</button>
             <button onClick={() => handleNavClick('services')} className={linkClasses}>Expertise</button>
             <button onClick={() => handleNavClick('about')} className={linkClasses}>Attorney Profile</button>
+            <button onClick={() => handleNavClick('guides')} className={linkClasses}>Guides</button>
             <a href="/services-pricing/" className={linkClasses}>Fee Schedule</a>
             <button 
               onClick={() => handleNavClick('contact')} 
@@ -83,6 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrollToSection }) => {
             <button onClick={() => handleNavClick('home')} className="block px-3 py-2 text-base font-medium text-white hover:text-law-silver w-full text-left">Home</button>
             <button onClick={() => handleNavClick('services')} className="block px-3 py-2 text-base font-medium text-white hover:text-law-silver w-full text-left">Expertise</button>
             <button onClick={() => handleNavClick('about')} className="block px-3 py-2 text-base font-medium text-white hover:text-law-silver w-full text-left">Attorney Profile</button>
+            <button onClick={() => handleNavClick('guides')} className="block px-3 py-2 text-base font-medium text-white hover:text-law-silver w-full text-left">Guides</button>
             <a href="/services-pricing/" className="block px-3 py-2 text-base font-medium text-white hover:text-law-silver">Fee Schedule</a>
             <button onClick={() => handleNavClick('contact')} className="block w-full text-left px-3 py-2 text-base font-medium text-law-silver hover:text-white">Schedule Consultation</button>
           </div>
